@@ -1,0 +1,24 @@
+# A swarm of simulated agents. No API keys, no network, no dependencies.
+#
+#   swarmdeck demo --agents 1000 --concurrency 200
+#   swarmdeck run src/swarmdeck/examples/demo.swarm.yaml
+#
+# {{ spec_dir }} expands to the directory holding this file, so the spec can
+# point at a sibling script regardless of where you run swarmdeck from.
+name: demo
+description: 500 simulated agents with realistic timings, costs, and failures
+
+concurrency: 100
+
+command: ["python3", "-u", "{{ spec_dir }}/demo_worker.py"]
+timeout: 120
+retries: 1
+retry_backoff: 1.0
+
+env:
+  DEMO_FAIL_RATE: "0.06"
+  DEMO_SLOW_RATE: "0.04"
+  DEMO_SPEED: "1.0"
+
+tasks:
+  count: 500

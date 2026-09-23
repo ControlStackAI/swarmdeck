@@ -1,0 +1,29 @@
+# swarmdeck does not care what an agent is made of. This one is `curl`.
+#
+# Any process is a valid agent: its stdout becomes log lines, its exit code
+# becomes pass/fail, and it opts into progress, cost, and result reporting
+# only if it wants to.
+#
+#   swarmdeck run src/swarmdeck/examples/shell.swarm.yaml
+name: http-check
+description: Fan out over a list of URLs with plain curl -- zero instrumentation
+
+concurrency: 16
+timeout: 20
+retries: 2
+
+command:
+  - curl
+  - --silent
+  - --show-error
+  - --fail
+  - --max-time
+  - "15"
+  - --output
+  - /dev/null
+  - --write-out
+  - "%{http_code} %{time_total}s {{ task.value }}\n"
+  - "{{ task.value }}"
+
+tasks:
+  file: urls.txt

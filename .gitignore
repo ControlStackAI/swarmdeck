@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Node / UI
+node_modules/
+ui/dist/
+*.tsbuildinfo
+
+# Built dashboard assets, produced by `make ui` and shipped in the wheel.
+# Not checked in: build artifacts do not belong in source history.
+src/swarmdeck/ui/
+
+# swarmdeck run data -- logs, results, manifests
+.swarmdeck/
+runs/
+
+# Local environment. Never commit credentials; see SECURITY.md.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets.*
+
+# Editors / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
