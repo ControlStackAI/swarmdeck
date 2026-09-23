@@ -66,6 +66,10 @@ artifacts = ["src/swarmdeck/ui/**"]
 
 [tool.hatch.build.targets.sdist]
 include = ["src/swarmdeck", "ui/src", "ui/package.json", "tests", "README.md", "LICENSE"]
+# `python -m build` builds the wheel *from the sdist*, so the dashboard has to
+# survive that hop too -- otherwise the wheel silently ships without a UI and
+# installing from an sdist would require Node.
+artifacts = ["src/swarmdeck/ui/**"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
