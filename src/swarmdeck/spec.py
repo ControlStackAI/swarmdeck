@@ -30,6 +30,14 @@ class SpecError(ValueError):
     """Raised for a spec a human needs to fix. Message is user-facing."""
 
 
+def _validate_task_count(count: int) -> int:
+    if count < 1:
+        raise SpecError("task count must be >= 1")
+    if count > MAX_AGENTS:
+        raise SpecError(f"{count} agents exceeds the {MAX_AGENTS} cap")
+    return count
+
+
 @dataclass(slots=True)
 class AgentSpec:
     command: list[str]
@@ -127,8 +135,9 @@ def _load_tasks(raw: Any, base: Path) -> list[Any]:
     if raw is None:
         raise SpecError("spec needs a 'tasks:' block (count, inline, file, or range)")
 
-    if isinstance(raw, int):
-        return [{"index": i} for i in range(raw)]
+    if isinstance(raw, int) and not isinstance(raw, bool):
+        count = _validate_task_count(raw)
+        return [{"index": i} for i in range(count)]
 
     if isinstance(raw, list):
         return list(raw)
@@ -140,11 +149,12 @@ def _load_tasks(raw: Any, base: Path) -> list[Any]:
 
     if "count" in raw:
         count = int(raw["count"])
-        if count < 1:
-            raise SpecError("tasks.count must be >= 1")
+        _validate_task_count(count)
         template = raw.get("template")
         if template is None:
             return [{"index": i} for i in range(count)]
+        if not isinstance(template, dict):
+            raise SpecError("tasks.count template must be a mapping")
         return [{**template, "index": i} for i in range(count)]
 
     if "inline" in raw:
@@ -155,9 +165,19 @@ def _load_tasks(raw: Any, base: Path) -> list[Any]:
 
     if "range" in raw:
         r = raw["range"]
+        if not isinstance(r, dict):
+            raise SpecError("tasks.range must be a mapping")
         start, stop = int(r.get("start", 0)), int(r["stop"])
         step = int(r.get("step", 1))
-        return [{"index": i, "value": i} for i in range(start, stop, step)]
+        try:
+            values = range(start, stop, step)
+            count = len(values)
+        except ValueError as exc:
+            raise SpecError("tasks.range step must not be zero") from exc
+        except OverflowError as exc:
+            raise SpecError(f"task range exceeds the {MAX_AGENTS} cap") from exc
+        _validate_task_count(count)
+        return [{"index": value, "value": value} for value in values]
 
     if "file" in raw:
         path = (base / str(raw["file"])).resolve()

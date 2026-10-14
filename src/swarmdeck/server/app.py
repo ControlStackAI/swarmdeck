@@ -17,6 +17,7 @@ import secrets
 import time
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit
 
 from fastapi import Depends, FastAPI, HTTPException, Query, Request, WebSocket
 from fastapi.responses import FileResponse, JSONResponse
@@ -260,6 +261,17 @@ def create_app(config: ServerConfig) -> FastAPI:
 
     @app.websocket("/ws/swarms/{swarm_id}")
     async def stream(websocket: WebSocket, swarm_id: str) -> None:
+        # Browsers do not apply CORS to WebSockets. Without an explicit
+        # same-origin check, a hostile website could read a loopback
+        # dashboard's live agent state in the default tokenless mode.
+        origin = websocket.headers.get("origin")
+        if origin:
+            parsed = urlsplit(origin)
+            if parsed.scheme not in ("http", "https") or parsed.netloc != websocket.headers.get(
+                "host", ""
+            ):
+                await websocket.close(code=4403, reason="origin not allowed")
+                return
         if config.token:
             supplied = websocket.query_params.get("token", "")
             if not secrets.compare_digest(supplied, config.token):

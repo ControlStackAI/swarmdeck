@@ -30,6 +30,20 @@ def test_concurrency_never_exceeds_agent_count(tmp_path):
 
 
 @pytest.mark.parametrize(
+    "tasks",
+    [
+        {"count": 100_001},
+        {"range": {"stop": 100_001}},
+        {"range": {"start": 0, "stop": 10, "step": 0}},
+        {"count": 2, "template": "not-a-mapping"},
+    ],
+)
+def test_task_expansion_rejects_invalid_or_oversized_inputs_before_materializing(tasks):
+    with pytest.raises(SpecError):
+        parse_spec({"command": ["true"], "tasks": tasks})
+
+
+@pytest.mark.parametrize(
     ("tasks", "size"),
     [
         (5, 5),

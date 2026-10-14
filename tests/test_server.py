@@ -160,6 +160,21 @@ async def test_websocket_rejects_a_bad_token(tmp_path):
             pass
 
 
+async def test_websocket_rejects_cross_origin_browser_clients(tmp_path):
+    client, specs = make_client(tmp_path)
+    with client:
+        swarm_id = client.post(
+            "/api/swarms", json={"spec_path": str(specs / "quick.swarm.yaml")}
+        ).json()["swarm_id"]
+        with (
+            pytest.raises(WebSocketDisconnect),
+            client.websocket_connect(
+                f"/ws/swarms/{swarm_id}", headers={"origin": "https://evil.example"}
+            ),
+        ):
+            pass
+
+
 async def test_delete_removes_the_swarm(tmp_path):
     client, specs = make_client(tmp_path)
     with client:

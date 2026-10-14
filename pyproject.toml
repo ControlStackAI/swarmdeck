@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "swarmdeck"
 version = "0.1.0"
-description = "Launch, control, and visualize agent swarms at 100-1000+ scale."
+description = "Launch, control, and visualize agent process swarms."
 readme = "README.md"
 license = "Apache-2.0"
 license-files = ["LICENSE"]

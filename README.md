@@ -17,7 +17,7 @@ Swarmdeck runs agent workloads as ordinary processes, supervises their lifecycle
 
 ## Quick start from source
 
-Requirements: Python 3.10+, a POSIX environment, and Node/npm to build the dashboard. Repository access is required while this repository is private. No published package is assumed by these instructions.
+Requirements: Python 3.10+, a POSIX environment, and Node 20.19 or newer with npm to build the dashboard. Repository access is required while this repository is private. No published package is assumed by these instructions.
 
 ```sh
 git clone https://github.com/ControlStackAI/swarmdeck.git
@@ -75,7 +75,7 @@ pytest -q
 npm --prefix ui run typecheck
 ```
 
-The source baseline passed 77 tests during the October 13, 2026 audit. This is not a scalability, UI, or production-readiness guarantee. Follow [CONTRIBUTING.md](CONTRIBUTING.md) for development conventions.
+The source baseline passed 82 tests during the October 13, 2026 audit. This is not a scalability, UI, or production-readiness guarantee. Follow [CONTRIBUTING.md](CONTRIBUTING.md) for development conventions.
 
 ## Status and security
 
