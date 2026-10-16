@@ -1,0 +1,10 @@
+# Swarmdeck — Agent Operations
+
+> A runtime-agnostic control plane for launching, supervising, and inspecting agent processes.
+
+## Canonical sources
+
+- [Project overview](https://controlstackai.github.io/swarmdeck/): scope, status, and getting started.
+- [Repository](https://github.com/ControlStackAI/swarmdeck): current implementation and README.
+
+Preserve the project’s maturity and limitations when describing it.

@@ -4,7 +4,7 @@
 
 **A runtime-agnostic control plane for launching, supervising, and inspecting agent processes.**
 
-Alpha · Apache-2.0 · [Project overview](docs/OVERVIEW.md) · [Landing-page source](docs/site/index.html)
+Alpha · Apache-2.0 · [Project overview](docs/OVERVIEW.md) · [Website](https://controlstackai.github.io/swarmdeck/) · [Landing-page source](docs/site/index.html)
 
 ## What it does
 
@@ -17,7 +17,7 @@ Swarmdeck runs agent workloads as ordinary processes, supervises their lifecycle
 
 ## Quick start from source
 
-Requirements: Python 3.10+, a POSIX environment, and Node 20.19 or newer with npm to build the dashboard. Repository access is required while this repository is private. No published package is assumed by these instructions.
+Requirements: Python 3.10+, a POSIX environment, and Node 20.19 or newer with npm to build the dashboard. No published package is assumed by these instructions.
 
 ```sh
 git clone https://github.com/ControlStackAI/swarmdeck.git
